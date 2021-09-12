@@ -74,8 +74,9 @@ function createScene() {
 function draw() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.enable(gl.DEPTH_TEST); // z-buffer
+    gl.enable(gl.DEPTH_TEST); // enable depth test in 3D space along the z-axis
 
+    // matrix for the cube to handle rotation, view etc.
     let view = createViewMatrix();
     let modelView = mat4.create();
     mat4.rotate(modelView, view, toRadian(scene.rotation.angle), scene.rotation.rotationOnAxis);

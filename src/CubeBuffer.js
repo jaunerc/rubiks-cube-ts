@@ -91,10 +91,6 @@ function defineColors(gl) {
         1, 1, 1,
     ];
 
-    /*for (let i = 0; i < 24; i++) {
-        colors.push(color.r, color.g, color.b);
-    }*/
-
     let buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
