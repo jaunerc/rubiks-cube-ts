@@ -1,9 +1,10 @@
 
-export function CubeBuffer(gl, color) {
+export function CubeBuffer(gl, position) {
     return {
         vertices: defineVertices(gl),
-        colors: defineColors(gl, color),
+        colors: defineColors(gl),
         triangles: defineTriangles(gl),
+        position: position
     };
 }
 

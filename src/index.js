@@ -19,7 +19,7 @@ let scene = {
         angle: 0,
         rotationOnAxis: [1, 1, 0]
     },
-    rectangleBuffer: null
+    cubes: [],
 };
 
 window.onload = start;
@@ -35,7 +35,6 @@ function start() {
     loadShader(gl, context.shaderProgram)
         .finally(() => {
             initGlVariables();
-            initBuffer();
             createScene();
             window.requestAnimationFrame(callback);
         });
@@ -58,10 +57,6 @@ function initGlVariables() {
     context.modelId = gl.getUniformLocation(program, "model");
 }
 
-function initBuffer() {
-    scene.rectangleBuffer = CubeBuffer(gl, scene.rectangleColor);
-}
-
 function createProjection() {
     let projection = mat4.create();
     let screenRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
@@ -77,6 +72,11 @@ function createViewMatrix() {
 
 function createScene() {
     createProjection();
+
+    scene.cubes.push(CubeBuffer(gl, [1, 1, 0]));
+    scene.cubes.push(CubeBuffer(gl, [1, -1, 0]));
+    scene.cubes.push(CubeBuffer(gl, [-1, 1, 0]));
+    scene.cubes.push(CubeBuffer(gl, [-1, -1, 0]));
 }
 
 function draw() {
@@ -84,22 +84,29 @@ function draw() {
 
     gl.enable(gl.DEPTH_TEST); // enable depth test in 3D space along the z-axis
 
-    // matrix for the cube to handle rotation, view etc.
     let view = createViewMatrix();
-    let modelView = mat4.create();
-    mat4.rotate(modelView, view, toRadian(scene.rotation.angle), scene.rotation.rotationOnAxis);
-    gl.uniformMatrix4fv(context.modelId, false, modelView);
 
-    let buffer = scene.rectangleBuffer;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
-    gl.vertexAttribPointer(context.vertexPositionId, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(context.vertexPositionId);
+    drawCubes(view);
+}
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
-    gl.vertexAttribPointer(context.vertexColorId, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(context.vertexColorId);
+function drawCubes(view) {
+    scene.cubes.forEach((buffer) => {
+        // matrix for the cube to handle rotation, view etc.
+        let modelView = mat4.create();
+        mat4.translate(modelView, view, buffer.position);
+        mat4.rotate(modelView, modelView, toRadian(scene.rotation.angle), scene.rotation.rotationOnAxis);
+        gl.uniformMatrix4fv(context.modelId, false, modelView);
 
-    let numTriangles = 36; // 12 triangles * 3 endpoints
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.triangles);
-    gl.drawElements(gl.TRIANGLES, numTriangles, gl.UNSIGNED_SHORT, 0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
+        gl.vertexAttribPointer(context.vertexPositionId, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(context.vertexPositionId);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
+        gl.vertexAttribPointer(context.vertexColorId, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(context.vertexColorId);
+
+        let numTriangles = 36; // 12 triangles * 3 endpoints
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.triangles);
+        gl.drawElements(gl.TRIANGLES, numTriangles, gl.UNSIGNED_SHORT, 0);
+    });
 }
