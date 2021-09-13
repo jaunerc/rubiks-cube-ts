@@ -11,7 +11,6 @@ let context = {
 
 let scene = {
     clearColor: {r:0.4, g:0.823, b:1, a:1},
-    rectangleColor: {r:1.0, g:1.0, b:1.0},
     eyePosition: [0, 0, 5],
     lookAtCenter: [0, 0, 0],
     lookAtUp: [0, 1, 0],
