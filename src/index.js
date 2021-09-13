@@ -16,7 +16,7 @@ let scene = {
     lookAtCenter: [0, 0, 0],
     lookAtUp: [0, 1, 0],
     rotation: {
-        angle: 120,
+        angle: 0,
         rotationOnAxis: [1, 1, 0]
     },
     rectangleBuffer: null
@@ -37,8 +37,16 @@ function start() {
             initGlVariables();
             initBuffer();
             createScene();
-            draw();
+            window.requestAnimationFrame(callback);
         });
+}
+
+function callback(){
+    scene.rotation.angle += 1;
+
+    draw();
+
+    window.requestAnimationFrame(callback);
 }
 
 function initGlVariables() {
