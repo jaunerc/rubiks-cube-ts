@@ -2,6 +2,7 @@ import {mat4} from "gl-matrix";
 import {loadShader, prepareWebGl} from './glUtil.js';
 import {CubeBuffer} from "./CubeBuffer";
 import {toRadian} from "gl-matrix/cjs/common";
+import {Cube} from "./Cube";
 
 let gl;
 
@@ -11,7 +12,7 @@ let context = {
 
 let scene = {
     clearColor: {r:0.4, g:0.823, b:1, a:1},
-    eyePosition: [0, 0, 5],
+    eyePosition: [20, 20, 20],
     lookAtCenter: [0, 0, 0],
     lookAtUp: [0, 1, 0],
     rotation: {
@@ -72,10 +73,13 @@ function createViewMatrix() {
 function createScene() {
     createProjection();
 
-    scene.cubes.push(CubeBuffer(gl, [1, 1, 0]));
-    scene.cubes.push(CubeBuffer(gl, [1, -1, 0]));
-    scene.cubes.push(CubeBuffer(gl, [-1, 1, 0]));
-    scene.cubes.push(CubeBuffer(gl, [-1, -1, 0]));
+    for(let x = -2; x <= 2; x +=2){
+        for(let y = -2; y <= 2; y +=2){
+            for(let z = -2; z <= 2; z +=2){
+                scene.cubes.push(new Cube(x, y, z));
+            }
+        }
+    }
 }
 
 function draw() {
@@ -89,11 +93,12 @@ function draw() {
 }
 
 function drawCubes(view) {
-    scene.cubes.forEach((buffer) => {
+    let buffer = CubeBuffer(gl, []);
+    scene.cubes.forEach((cube) => {
         // matrix for the cube to handle rotation, view etc.
         let modelView = mat4.create();
-        mat4.translate(modelView, view, buffer.position);
-        mat4.rotate(modelView, modelView, toRadian(scene.rotation.angle), scene.rotation.rotationOnAxis);
+        mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
+        //mat4.rotate(modelView, modelView, toRadian(scene.rotation.angle), scene.rotation.rotationOnAxis);
         gl.uniformMatrix4fv(context.modelId, false, modelView);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);

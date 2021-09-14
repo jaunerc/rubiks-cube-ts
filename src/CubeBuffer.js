@@ -11,40 +11,40 @@ export function CubeBuffer(gl, position) {
 function defineVertices(gl) {
     let vertices = [
         // front
-        -0.5, 0.5, 0.5,
-        -0.5, -0.5, 0.5,
-        0.5, -0.5, 0.5,
-        0.5, 0.5, 0.5,
+        -1, 1, 1,
+        -1, -1, 1,
+        1, -1, 1,
+        1, 1, 1,
 
         // right
-        0.5, 0.5, 0.5,
-        0.5, -0.5, 0.5,
-        0.5, -0.5, -0.5,
-        0.5, 0.5, -0.5,
+        1, 1, 1,
+        1, -1, 1,
+        1, -1, -1,
+        1, 1, -1,
 
         // top
-        -0.5, 0.5, 0.5,
-        0.5, 0.5, 0.5,
-        0.5, 0.5, -0.5,
-        -0.5, 0.5, -0.5,
+        -1, 1, 1,
+        1, 1, 1,
+        1, 1, -1,
+        -1, 1, -1,
 
         // left
-        -0.5, 0.5, 0.5,
-        -0.5, -0.5, 0.5,
-        -0.5, -0.5, -0.5,
-        -0.5, 0.5, -0.5,
+        -1, 1, 1,
+        -1, -1, 1,
+        -1, -1, -1,
+        -1, 1, -1,
 
         // bottom
-        -0.5, -0.5, 0.5,
-        0.5, -0.5, 0.5,
-        0.5, -0.5, -0.5,
-        -0.5, -0.5, -0.5,
+        -1, -1, 1,
+        1, -1, 1,
+        1, -1, -1,
+        -1, -1, -1,
 
         // back
-        -0.5, 0.5, -0.5,
-        -0.5, -0.5, -0.5,
-        0.5, -0.5, -0.5,
-        0.5, 0.5, -0.5
+        -1, 1, -1,
+        -1, -1, -1,
+        1, -1, -1,
+        1, 1, -1
     ];
 
     let buffer = gl.createBuffer();
@@ -53,49 +53,40 @@ function defineVertices(gl) {
     return buffer;
 }
 
+const RED = [1,0,0];
+const GREEN = [0,1,0];
+const BLUE = [0,0,1];
+const PINK = [1,0,1];
+const TURQUOISE = [0,1,1];
+const WHITE = [1,1,1];
+const BLACK = [0,0,0];
+
 function defineColors(gl) {
-    let colors = [
-        // front
-        1, 0, 0,
-        1, 0, 0,
-        1, 0, 0,
-        1, 0, 0,
+    let colors = [];
 
-        // right
-        0, 1, 0,
-        0, 1, 0,
-        0, 1, 0,
-        0, 1, 0,
-
-        // top
-        0, 0, 1,
-        0, 0, 1,
-        0, 0, 1,
-        0, 0, 1,
-
-        // left
-        1, 0, 1,
-        1, 0, 1,
-        1, 0, 1,
-        1, 0, 1,
-
-        // bottom
-        0, 1, 1,
-        0, 1, 1,
-        0, 1, 1,
-        0, 1, 1,
-
-        // back
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1,
-    ];
+    // front
+    colorSide(colors, RED);
+    // right
+    colorSide(colors, GREEN);
+    // top
+    colorSide(colors, BLUE);
+    // left
+    colorSide(colors, PINK);
+    // bottom
+    colorSide(colors, TURQUOISE);
+    // back
+    colorSide(colors, WHITE);
 
     let buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors.flat()), gl.STATIC_DRAW);
     return buffer;
+}
+
+function colorSide(colors, color){
+    for (let i = 0; i < 4; i++){
+        colors.push(color);
+    }
 }
 
 function defineTriangles(gl) {
