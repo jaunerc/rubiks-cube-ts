@@ -10,9 +10,17 @@ let context = {
     shaderProgram: null
 };
 
+let sliderX = document.getElementById("rangeX");
+let sliderY = document.getElementById("rangeY");
+let sliderZ = document.getElementById("rangeZ");
+let zoom = document.getElementById("zoom");
+let xAngle = 10;
+let yAngle = 10;
+let zAngle = 10;
+
 let scene = {
     clearColor: {r:0.4, g:0.823, b:1, a:1},
-    eyePosition: [20, 20, 20],
+    eyePosition: [xAngle, yAngle, zAngle],
     lookAtCenter: [0, 0, 0],
     lookAtUp: [0, 1, 0],
     rotation: {
@@ -39,6 +47,35 @@ function start() {
             window.requestAnimationFrame(callback);
         });
 }
+
+sliderX.oninput = function() {
+    console.log('value: ', this.value);
+    xAngle = (parseInt(this.value)* Math.PI / 180);
+    console.log('x: ', xAngle, 'y: ', yAngle, 'z: ',zAngle);
+    scene.eyePosition = [xAngle, yAngle, zAngle];
+    draw();
+}
+
+sliderY.oninput = function() {
+    console.log('valy:', this.value);
+    yAngle = (parseInt(this.value)* Math.PI / 180);
+    scene.eyePosition = [xAngle, yAngle, zAngle];
+    draw();
+}
+
+sliderZ.oninput = function() {
+    zAngle = (parseInt(this.value) *Math.PI / 180);
+    scene.eyePosition = [xAngle, yAngle, zAngle];
+    draw();
+}
+
+zoom.oninput = function() {
+    console.log('zoom:', this.value);
+    xAngle = yAngle = zAngle = this.value;
+    scene.eyePosition = [this.value, this.value, this.value];
+    draw();
+}
+
 
 function callback(){
     scene.rotation.angle += 1;
