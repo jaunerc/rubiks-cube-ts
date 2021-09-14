@@ -99,19 +99,6 @@ function draw() {
 function drawCubes(view) {
     let buffer = CubeBuffer(gl);
     scene.cubes.forEach((cube) => {
-        // matrix for the cube to handle rotation, view etc.
-        let modelView = mat4.create();
-
-        if(cube.positionX == 2){
-            let angleRadian = toRadian(scene.rotation.angle);
-            mat4.rotate(modelView, view, angleRadian, [1, 0, 0]);
-            mat4.translate(modelView, modelView, [cube.positionX, cube.positionY, cube.positionZ]);
-        }
-        else {
-            mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
-        }
-
-        gl.uniformMatrix4fv(context.modelId, false, modelView);
         drawSolid(view, cube, buffer);
 
         drawWireFrame(buffer);
@@ -121,7 +108,16 @@ function drawCubes(view) {
 function drawSolid(view, cube, buffer) {
     // matrix for the cube to handle rotation, view etc.
     let modelView = mat4.create();
-    mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
+
+    if(cube.positionX == 2){
+        let angleRadian = toRadian(scene.rotation.angle);
+        mat4.rotate(modelView, view, angleRadian, [1, 0, 0]);
+        mat4.translate(modelView, modelView, [cube.positionX, cube.positionY, cube.positionZ]);
+    }
+    else {
+        mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
+    }
+
     gl.uniformMatrix4fv(context.modelId, false, modelView);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
