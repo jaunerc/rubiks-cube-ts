@@ -21,11 +21,12 @@ let zAngle = 10;
 let scene = {
     clearColor: {r:0.4, g:0.823, b:1, a:1},
     eyePosition: [xAngle, yAngle, zAngle],
+    wireFrameColor: [0, 0, 0, 1],
     lookAtCenter: [0, 0, 0],
     lookAtUp: [0, 1, 0],
     rotation: {
         angle: 0,
-        rotationOnAxis: [1, 1, 0]
+        rotationOnAxis: [2, 0, 0]
     },
     cubes: [],
 };
@@ -92,6 +93,9 @@ function initGlVariables() {
 
     context.projectionId = gl.getUniformLocation(program, "projection");
     context.modelId = gl.getUniformLocation(program, "model");
+
+    context.wireFrameColorId = gl.getUniformLocation(program, "wireFrameColor");
+    context.drawWireFrameId = gl.getUniformLocation(program, "drawWireFrame");
 }
 
 function createProjection() {
@@ -130,24 +134,49 @@ function draw() {
 }
 
 function drawCubes(view) {
-    let buffer = CubeBuffer(gl, []);
+    let buffer = CubeBuffer(gl);
     scene.cubes.forEach((cube) => {
-        // matrix for the cube to handle rotation, view etc.
-        let modelView = mat4.create();
-        mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
-        //mat4.rotate(modelView, modelView, toRadian(scene.rotation.angle), scene.rotation.rotationOnAxis);
-        gl.uniformMatrix4fv(context.modelId, false, modelView);
+        drawSolid(view, cube, buffer);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
-        gl.vertexAttribPointer(context.vertexPositionId, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(context.vertexPositionId);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
-        gl.vertexAttribPointer(context.vertexColorId, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(context.vertexColorId);
-
-        let numTriangles = 36; // 12 triangles * 3 endpoints
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.triangles);
-        gl.drawElements(gl.TRIANGLES, numTriangles, gl.UNSIGNED_SHORT, 0);
+        drawWireFrame(buffer);
     });
+}
+
+function drawSolid(view, cube, buffer) {
+    // matrix for the cube to handle rotation, view etc.
+    let modelView = mat4.create();
+
+    if(cube.positionX == 2){
+        let angleRadian = toRadian(scene.rotation.angle);
+        mat4.rotate(modelView, view, angleRadian, [1, 0, 0]);
+        mat4.translate(modelView, modelView, [cube.positionX, cube.positionY, cube.positionZ]);
+    }
+    else {
+        mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
+    }
+
+    gl.uniformMatrix4fv(context.modelId, false, modelView);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
+    gl.vertexAttribPointer(context.vertexPositionId, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(context.vertexPositionId);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
+    gl.vertexAttribPointer(context.vertexColorId, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(context.vertexColorId);
+
+    let numTriangles = 36; // 12 triangles * 3 endpoints
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.triangles);
+    gl.drawElements(gl.TRIANGLES, numTriangles, gl.UNSIGNED_SHORT, 0);
+}
+
+function drawWireFrame(buffer) {
+    gl.uniform1i(context.drawWireFrameId, 1);
+    gl.uniform4fv(context.wireFrameColorId, scene.wireFrameColor);
+
+    let numLines = 24; // 12 lines * 2 endpoints
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.lines);
+    gl.drawElements(gl.LINES, numLines, gl.UNSIGNED_SHORT, 0);
+
+    gl.uniform1i(context.drawWireFrameId, 0);
 }

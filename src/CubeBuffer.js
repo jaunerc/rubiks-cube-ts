@@ -1,10 +1,10 @@
 
-export function CubeBuffer(gl, position) {
+export function CubeBuffer(gl) {
     return {
         vertices: defineVertices(gl),
         colors: defineColors(gl),
         triangles: defineTriangles(gl),
-        position: position
+        lines: defineLines(gl)
     };
 }
 
@@ -108,5 +108,32 @@ function defineTriangles(gl) {
     let buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangles), gl.STATIC_DRAW);
+    return buffer;
+}
+
+function defineLines(gl) {
+    let lines = [
+        // front
+        0, 1,
+        1, 2,
+        2, 3,
+        3, 0,
+
+        // back
+        20, 21,
+        21, 22,
+        22, 23,
+        23, 20,
+
+        // front to back
+        0, 20,
+        1, 21,
+        2, 22,
+        3, 23,
+    ];
+
+    let buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(lines), gl.STATIC_DRAW);
     return buffer;
 }
