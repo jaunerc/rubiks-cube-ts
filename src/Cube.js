@@ -57,7 +57,7 @@ export class Cube{
     getModelView(view){
         let modelView = mat4.create();
 
-        mat4.rotate(modelView, view, toRadian(this.currentAngleX), [1, 0, 0]);
+        mat4.rotate(modelView, modelView, toRadian(this.currentAngleX), [1, 0, 0]);
         mat4.rotate(modelView, modelView, toRadian(this.currentAngleY), [0, 1, 0]);
         mat4.rotate(modelView, modelView, toRadian(this.currentAngleZ), [0, 0, 1]);
 
