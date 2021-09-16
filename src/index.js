@@ -10,6 +10,59 @@ let context = {
     shaderProgram: null
 };
 
+let step = 0;
+
+let positiveXRotation = {
+    rotationMatrix: [
+        1, 0, 0,
+        0, 0, -1,
+        0, 1, 0
+    ],
+    angle: [90, 0, 0]
+}
+let negativeXRotation = {
+    rotationMatrix: [
+        1, 0, 0,
+        0, 0, 1,
+        0, -1, 0
+    ],
+    angle: [-90, 0, 0]
+}
+
+let positiveYRotation = {
+    rotationMatrix: [
+        0, 0, 1,
+        0, 1, 0,
+        -1, 0, 0
+    ],
+    angle: [0, 90, 0]
+}
+let negativeYRotation = {
+    rotationMatrix: [
+        0, 0, -1,
+        0, 1, 0,
+        1, 0, 0
+    ],
+    angle: [0, -90, 0]
+}
+
+let positiveZRotation = {
+    rotationMatrix: [
+        0, -1, 0,
+        1, 0, 0,
+        0, 0, 1
+    ],
+    angle: [0, 0, 90]
+}
+let negativeZRotation = {
+    rotationMatrix: [
+        0, 1, 0,
+        -1, 0, 0,
+        0, 0, 1
+    ],
+    angle: [0, 0, -90]
+}
+
 let scene = {
     clearColor: {r:0.4, g:0.823, b:1, a:1},
     wireFrameColor: [0, 0, 0, 1],
@@ -27,6 +80,7 @@ window.onload = start;
 
 function start() {
     let canvas = document.getElementById('myCanvas');
+    canvas.addEventListener('keydown', onKeyDown);
     gl = prepareWebGl(canvas);
     context.shaderProgram = gl.createProgram();
 
@@ -41,12 +95,75 @@ function start() {
         });
 }
 
+function onKeyDown(){
+    stepper();
+    step++;
+}
+
 function callback(){
-    scene.rotation.angle += 1;
+    let ready = scene.cubes.filter(c => c.ready);
+
+    if(scene.cubes.length === ready.length) {
+        stepper();
+    }
 
     draw();
-
     window.requestAnimationFrame(callback);
+}
+
+function stepper(){
+    let rotationInfo;
+    let face;
+
+    switch (step){
+        case 1:
+            rotationInfo = positiveXRotation;
+            face = filterCubesX(0);
+            break
+        case 2:
+            rotationInfo = negativeXRotation;
+            face = filterCubesX(0);
+            break
+        case 3:
+            rotationInfo = positiveYRotation;
+            face = filterCubesY(2);
+            break
+        case 4:
+            rotationInfo = negativeYRotation;
+            face = filterCubesY(2);
+            break
+        case 5:
+            rotationInfo = positiveZRotation;
+            face = filterCubesZ(-2);
+            break
+        case 6:
+            rotationInfo = negativeZRotation;
+            face = filterCubesZ(-2);
+            break
+        default:
+            step = 1;
+            return;
+    }
+
+    step++;
+
+    rotateCubes(face, rotationInfo);
+}
+
+function filterCubesX(number){
+    return scene.cubes.filter(c => c.currentPositionX === number);
+}
+
+function filterCubesY(number){
+    return scene.cubes.filter(c => c.currentPositionY === number);
+}
+
+function filterCubesZ(number){
+    return scene.cubes.filter(c => c.currentPositionZ === number);
+}
+
+function rotateCubes(cubes, rotationInfo){
+    cubes.forEach(c => c.applyRotation(rotationInfo.rotationMatrix, rotationInfo.angle));
 }
 
 function initGlVariables() {
@@ -98,6 +215,8 @@ function draw() {
 
 function drawCubes(view) {
     let buffer = CubeBuffer(gl);
+
+    scene.cubes.forEach(c => c.calculateCurrent());
     scene.cubes.forEach((cube) => {
         drawSolid(view, cube, buffer);
 
@@ -106,18 +225,9 @@ function drawCubes(view) {
 }
 
 function drawSolid(view, cube, buffer) {
+
     // matrix for the cube to handle rotation, view etc.
-    let modelView = mat4.create();
-
-    if(cube.positionX == 2){
-        let angleRadian = toRadian(scene.rotation.angle);
-        mat4.rotate(modelView, view, angleRadian, [1, 0, 0]);
-        mat4.translate(modelView, modelView, [cube.positionX, cube.positionY, cube.positionZ]);
-    }
-    else {
-        mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
-    }
-
+    let modelView = cube.getModelView(view);
     gl.uniformMatrix4fv(context.modelId, false, modelView);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
