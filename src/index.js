@@ -50,28 +50,30 @@ function start() {
 }
 
 sliderX.oninput = function() {
+    scene.lookAtUp = [0, 1, 0];
     xAngle = Math.cos(toRadian(this.value)) * 20;
     zAngle = Math.sin(toRadian(this.value)) * 20;
     scene.eyePosition = [xAngle, yAngle, zAngle];
 }
 
 sliderY.oninput = function() {
-    console.log('valy:', this.value);
-    yAngle = (parseInt(this.value)* Math.PI / 180);
+    yAngle = Math.sin(toRadian(this.value)) * 20;
+    xAngle = Math.cos(toRadian(this.value)) * 20;
+    if(this.value <= 90){
+        scene.lookAtUp = [0, 1, 0];
+    } else if(this.value > 90 && this.value <= 180){
+        scene.lookAtUp =  [0, -1, 0];
+    } else {
+        scene.lookAtUp = [1, 0, 0];
+    }
+    console.log(this.value, 'x:', xAngle, 'y:', yAngle);
     scene.eyePosition = [xAngle, yAngle, zAngle];
-}
-
-sliderZ.oninput = function() {
-    zAngle = (parseInt(this.value) *Math.PI / 180);
-    scene.eyePosition = [xAngle, yAngle, zAngle];
-    draw();
 }
 
 zoom.oninput = function() {
     console.log('zoom:', this.value);
     xAngle = yAngle = zAngle = this.value;
     scene.eyePosition = [this.value, this.value, this.value];
-    draw();
 }
 
 
@@ -90,6 +92,7 @@ function initGlVariables() {
 
     context.projectionId = gl.getUniformLocation(program, "projection");
     context.modelId = gl.getUniformLocation(program, "model");
+    context.viewId = gl.getUniformLocation(program, "view");
 
     context.wireFrameColorId = gl.getUniformLocation(program, "wireFrameColor");
     context.drawWireFrameId = gl.getUniformLocation(program, "drawWireFrame");
@@ -126,6 +129,7 @@ function draw() {
     gl.enable(gl.DEPTH_TEST); // enable depth test in 3D space along the z-axis
 
     let view = createViewMatrix();
+    gl.uniformMatrix4fv(context.viewId, false, view);
 
     drawCubes(view);
 }
@@ -145,11 +149,11 @@ function drawSolid(view, cube, buffer) {
 
     if(cube.positionX == 2){
         let angleRadian = toRadian(scene.rotation.angle);
-        mat4.rotate(modelView, view, angleRadian, [1, 0, 0]);
+        mat4.rotate(modelView, modelView, angleRadian, [1, 0, 0]);
         mat4.translate(modelView, modelView, [cube.positionX, cube.positionY, cube.positionZ]);
     }
     else {
-        mat4.translate(modelView, view, [cube.positionX, cube.positionY, cube.positionZ]);
+        mat4.translate(modelView, modelView, [cube.positionX, cube.positionY, cube.positionZ]);
     }
 
     gl.uniformMatrix4fv(context.modelId, false, modelView);
