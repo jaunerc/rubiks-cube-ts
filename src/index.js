@@ -10,6 +10,13 @@ let context = {
     shaderProgram: null
 };
 
+let sliderX = document.getElementById("rangeX");
+let sliderY = document.getElementById("rangeY");
+let zoom = document.getElementById("zoom");
+let xAngle = 20;
+let yAngle = 0;
+let zAngle = 0;
+
 let step = 0;
 
 let positiveXRotation = {
@@ -65,8 +72,8 @@ let negativeZRotation = {
 
 let scene = {
     clearColor: {r:0.4, g:0.823, b:1, a:1},
+    eyePosition: [xAngle, yAngle, zAngle],
     wireFrameColor: [0, 0, 0, 1],
-    eyePosition: [20, 20, 20],
     lookAtCenter: [0, 0, 0],
     lookAtUp: [0, 1, 0],
     rotation: {
@@ -80,7 +87,6 @@ window.onload = start;
 
 function start() {
     let canvas = document.getElementById('myCanvas');
-    canvas.addEventListener('keydown', onKeyDown);
     gl = prepareWebGl(canvas);
     context.shaderProgram = gl.createProgram();
 
@@ -95,10 +101,33 @@ function start() {
         });
 }
 
-function onKeyDown(){
-    stepper();
-    step++;
+sliderX.oninput = function() {
+    scene.lookAtUp = [0, 1, 0];
+    xAngle = Math.cos(toRadian(this.value)) * 20;
+    zAngle = Math.sin(toRadian(this.value)) * 20;
+    scene.eyePosition = [xAngle, yAngle, zAngle];
 }
+
+sliderY.oninput = function() {
+    yAngle = Math.sin(toRadian(this.value)) * 20;
+    xAngle = Math.cos(toRadian(this.value)) * 20;
+    if(this.value <= 90){
+        scene.lookAtUp = [0, 1, 0];
+    } else if(this.value > 90 && this.value <= 180){
+        scene.lookAtUp =  [0, -1, 0];
+    } else {
+        scene.lookAtUp = [1, 0, 0];
+    }
+    console.log(this.value, 'x:', xAngle, 'y:', yAngle);
+    scene.eyePosition = [xAngle, yAngle, zAngle];
+}
+
+zoom.oninput = function() {
+    console.log('zoom:', this.value);
+    xAngle = yAngle = zAngle = this.value;
+    scene.eyePosition = [this.value, this.value, this.value];
+}
+
 
 function callback(){
     let ready = scene.cubes.filter(c => c.ready);
@@ -108,6 +137,7 @@ function callback(){
     }
 
     draw();
+
     window.requestAnimationFrame(callback);
 }
 
@@ -173,6 +203,7 @@ function initGlVariables() {
 
     context.projectionId = gl.getUniformLocation(program, "projection");
     context.modelId = gl.getUniformLocation(program, "model");
+    context.viewId = gl.getUniformLocation(program, "view");
 
     context.wireFrameColorId = gl.getUniformLocation(program, "wireFrameColor");
     context.drawWireFrameId = gl.getUniformLocation(program, "drawWireFrame");
@@ -209,6 +240,7 @@ function draw() {
     gl.enable(gl.DEPTH_TEST); // enable depth test in 3D space along the z-axis
 
     let view = createViewMatrix();
+    gl.uniformMatrix4fv(context.viewId, false, view);
 
     drawCubes(view);
 }

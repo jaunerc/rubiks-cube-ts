@@ -2,10 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="index.css">
     <title>Rubik's Cube</title>
 </head>
-<body>
-    <canvas id="myCanvas" width="800" height="800" tabindex="1"></canvas>
-    <script src="main.js"></script>
+<body class="all">
+<canvas id="myCanvas" width="800" height="800"></canvas>
+<div>
+    <div>
+        X: <input type="range" min=0 max=360 value=0 class="slider" id="rangeX">
+    </div>
+    <div>
+        Y: <input type="range" min=0 max=360 value=0 class="slider" id="rangeY">
+    </div>
+    <div>
+        Zoom: <input type="range" min=1 max=100 value=20 class="slider" id="zoom">
+    </div>
+</div>
+<script src="main.js"></script>
+
+
 </body>
 </html>
