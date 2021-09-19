@@ -1,14 +1,20 @@
-
-export function CubeBuffer(gl) {
-    return {
-        vertices: defineVertices(gl),
-        colors: defineColors(gl),
-        triangles: defineTriangles(gl),
-        lines: defineLines(gl)
-    };
+export interface CubeBuffer {
+    vertices: WebGLBuffer,
+    colors: WebGLBuffer,
+    triangles: WebGLBuffer,
+    lines: WebGLBuffer,
 }
 
-function defineVertices(gl) {
+export function createCubeBuffer(gl: WebGLRenderingContext): CubeBuffer {
+    return {
+        vertices : defineVertices(gl),
+        colors : defineColors(gl),
+        triangles : defineTriangles(gl),
+        lines : defineLines(gl),
+    }
+}
+
+function defineVertices(gl: WebGLRenderingContext): WebGLBuffer {
     let vertices = [
         // front
         -1, 1, 1,
@@ -53,16 +59,16 @@ function defineVertices(gl) {
     return buffer;
 }
 
-const RED = [1,0,0];
-const GREEN = [0,1,0];
-const BLUE = [0,0,1];
-const PINK = [1,0,1];
-const TURQUOISE = [0,1,1];
-const WHITE = [1,1,1];
-const BLACK = [0,0,0];
+const RED = [1, 0, 0];
+const GREEN = [0, 1, 0];
+const BLUE = [0, 0, 1];
+const PINK = [1, 0, 1];
+const TURQUOISE = [0, 1, 1];
+const WHITE = [1, 1, 1];
+const BLACK = [0, 0, 0];
 
-function defineColors(gl) {
-    let colors = [];
+function defineColors(gl: WebGLRenderingContext): WebGLBuffer {
+    let colors: number[] = [];
 
     // front
     colorSide(colors, RED);
@@ -83,26 +89,26 @@ function defineColors(gl) {
     return buffer;
 }
 
-function colorSide(colors, color){
-    for (let i = 0; i < 4; i++){
-        colors.push(color);
+function colorSide(colors: number[], color: number[]) {
+    for (let i = 0; i < 4; i++) {
+        colors.push(color[0], color[1], color[2]);
     }
 }
 
-function defineTriangles(gl) {
+function defineTriangles(gl: WebGLRenderingContext): WebGLBuffer {
     let triangles = [
         // front
-        0, 1, 2,        2, 3, 0,
+        0, 1, 2, 2, 3, 0,
         // right
-        4, 5, 6,        6, 7, 4,
+        4, 5, 6, 6, 7, 4,
         // top
-        8, 9, 10,       10, 11, 8,
+        8, 9, 10, 10, 11, 8,
         // left
-        12, 13, 14,     14, 15, 12,
+        12, 13, 14, 14, 15, 12,
         // bottom
-        16, 17, 18,     18, 19, 16,
+        16, 17, 18, 18, 19, 16,
         // back
-        20, 21, 22,     22, 23, 20
+        20, 21, 22, 22, 23, 20
     ];
 
     let buffer = gl.createBuffer();
@@ -111,7 +117,7 @@ function defineTriangles(gl) {
     return buffer;
 }
 
-function defineLines(gl) {
+function defineLines(gl: WebGLRenderingContext): WebGLBuffer {
     let lines = [
         // front
         0, 1,

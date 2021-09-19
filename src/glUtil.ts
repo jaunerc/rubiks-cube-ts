@@ -1,13 +1,13 @@
 
-export function prepareWebGl(canvas) {
-    let context = canvas.getContext('webgl')
+export function prepareWebGl(canvas: HTMLCanvasElement): WebGLRenderingContext {
+    let context = canvas.getContext('webgl');
     if (!context) {
         alert("Your Browser does not support WebGL :-(");
     }
     return context;
 }
 
-export async function loadShader(gl, shaderProgram) {
+export async function loadShader(gl: WebGLRenderingContext, shaderProgram: WebGLProgram) {
     const fragmentUrl = './FragmentShader.glsl';
     const vertexUrl = './VertexShader.glsl';
     const fragmentSource = await fetch(fragmentUrl)
@@ -34,7 +34,7 @@ export async function loadShader(gl, shaderProgram) {
     console.log("webgl is ready");
 }
 
-function createAndCompileShader(gl, shaderType, shaderSource) {
+function createAndCompileShader(gl: WebGLRenderingContext, shaderType: number, shaderSource: string) {
     let shader = gl.createShader(shaderType);
     gl.shaderSource(shader, shaderSource);
     gl.compileShader(shader);
