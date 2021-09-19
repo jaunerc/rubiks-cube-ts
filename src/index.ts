@@ -1,5 +1,5 @@
 import {mat4} from "gl-matrix";
-import {loadShader, prepareWebGl} from './glUtil';
+import {loadShader, prepareWebGl} from './GlShaderLoader';
 import {createCubeBuffer, CubeBuffer} from "./CubeBuffer";
 import {createRubikCube, Cube, RubikCube} from "./RubikCube";
 
