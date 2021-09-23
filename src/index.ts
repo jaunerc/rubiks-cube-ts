@@ -1,7 +1,7 @@
 import {mat4} from "gl-matrix";
 import {loadShader, prepareWebGl} from './GlShaderLoader';
 import {createCubeBuffer, CubeBuffer} from "./CubeBuffer";
-import {createRubikCube, Cube, RubikCube} from "./RubikCube";
+import {createRubikCube, Cube, rotateRubikCube, RubikCube} from "./RubikCube";
 
 interface ShaderContext {
     vertexPositionId: number,
@@ -44,6 +44,7 @@ function start() {
             shaderContext = createShaderContext();
             createProjection();
             scene = createScene();
+            scene.rubikCube = rotateRubikCube(scene.rubikCube);
             window.requestAnimationFrame(callback);
         });
 }
@@ -124,6 +125,7 @@ function drawSolid(cube: Cube, buffer: CubeBuffer) {
     // matrix for the cube to handle rotation, view etc.
     let modelView = mat4.create();
     mat4.translate(modelView, modelView, [cube.position[0], cube.position[1], cube.position[2]]);
+    mat4.rotateY(modelView, modelView, cube.rotation[1]);
     gl.uniformMatrix4fv(shaderContext.modelId, false, modelView);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
