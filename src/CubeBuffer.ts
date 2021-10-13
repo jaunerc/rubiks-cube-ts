@@ -1,6 +1,5 @@
 export interface CubeBuffer {
     vertices: WebGLBuffer,
-    colors: WebGLBuffer,
     triangles: WebGLBuffer,
     lines: WebGLBuffer,
 }
@@ -8,7 +7,6 @@ export interface CubeBuffer {
 export function createCubeBuffer(gl: WebGLRenderingContext): CubeBuffer {
     return {
         vertices : defineVertices(gl),
-        colors : defineColors(gl),
         triangles : defineTriangles(gl),
         lines : defineLines(gl),
     }
@@ -59,29 +57,21 @@ function defineVertices(gl: WebGLRenderingContext): WebGLBuffer {
     return buffer;
 }
 
-const RED = [1, 0, 0];
-const GREEN = [0, 1, 0];
-const BLUE = [0, 0, 1];
-const YELLOW = [1, 1, 0];
-const WHITE = [1, 1, 1];
-const ORANGE = [1, 0.6, 0];
-const BLACK = [0, 0, 0];
-
-function defineColors(gl: WebGLRenderingContext): WebGLBuffer {
+export function createColorBuffer(gl: WebGLRenderingContext, front: number[], right: number[], top: number[], left: number[], bottom: number[], back: number[]): WebGLBuffer {
     let colors: number[] = [];
 
     // front
-    colorSide(colors, RED);
+    colorSide(colors, front);
     // right
-    colorSide(colors, BLUE);
+    colorSide(colors, right);
     // top
-    colorSide(colors, WHITE);
+    colorSide(colors, top);
     // left
-    colorSide(colors, GREEN);
+    colorSide(colors, left);
     // bottom
-    colorSide(colors, YELLOW);
+    colorSide(colors, bottom);
     // back
-    colorSide(colors, ORANGE);
+    colorSide(colors, back);
 
     let buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);

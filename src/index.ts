@@ -1,6 +1,6 @@
 import {mat4} from "gl-matrix";
 import {loadShader, prepareWebGl} from './GlShaderLoader';
-import {createCubeBuffer, CubeBuffer} from "./CubeBuffer";
+import {createColorBuffer, createCubeBuffer, CubeBuffer} from "./CubeBuffer";
 import {createRubikCube, Cube, rotateLayerX, rotateLayerY, rotateLayerZ, RubikCube} from "./RubikCube";
 
 interface ShaderContext {
@@ -126,21 +126,30 @@ function drawSolid(cube: Cube, buffer: CubeBuffer) {
     // matrix for the cube to handle rotation, view etc.
     let modelView = mat4.create();
     mat4.translate(modelView, modelView, [cube.position[0], cube.position[1], cube.position[2]]);
-    mat4.rotateX(modelView, modelView, cube.rotation[0]);
-    mat4.rotateY(modelView, modelView, cube.rotation[1]);
     gl.uniformMatrix4fv(shaderContext.modelId, false, modelView);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.vertices);
     gl.vertexAttribPointer(shaderContext.vertexPositionId, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(shaderContext.vertexPositionId);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
+    let colorBuffer = facesToBuffer(cube);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.vertexAttribPointer(shaderContext.vertexColorId, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(shaderContext.vertexColorId);
 
     let numTriangles = 36; // 12 triangles * 3 endpoints
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.triangles);
     gl.drawElements(gl.TRIANGLES, numTriangles, gl.UNSIGNED_SHORT, 0);
+}
+
+function facesToBuffer(cube: Cube): WebGLBuffer {
+    return createColorBuffer(gl,
+        cube.faces.front,
+        cube.faces.right,
+        cube.faces.top,
+        cube.faces.left,
+        cube.faces.bottom,
+        cube.faces.back);
 }
 
 function drawWireFrame(buffer: CubeBuffer) {
@@ -156,31 +165,31 @@ function drawWireFrame(buffer: CubeBuffer) {
 
 function keyPressed(e: KeyboardEvent) {
     switch (e.key) {
-        case 'R':
+        case 'r':
             rotateLayerX(scene.rubikCube, 2);
             break;
-        case 'S':
+        case 's':
             rotateLayerX(scene.rubikCube, 0);
             break;
-        case 'L':
+        case 'l':
             rotateLayerX(scene.rubikCube, -2);
             break;
-        case 'T':
+        case 't':
             rotateLayerY(scene.rubikCube, 2);
             break;
-        case 'E':
+        case 'e':
             rotateLayerY(scene.rubikCube, 0);
             break;
-        case 'B':
+        case 'b':
             rotateLayerY(scene.rubikCube, -2);
             break;
-        case 'F':
+        case 'f':
             rotateLayerZ(scene.rubikCube, 2);
             break;
-        case 'M':
+        case 'm':
             rotateLayerZ(scene.rubikCube, 0);
             break;
-        case 'K':
+        case 'k':
             rotateLayerZ(scene.rubikCube, -2);
             break;
     }
