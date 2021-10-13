@@ -62,9 +62,9 @@ function defineVertices(gl: WebGLRenderingContext): WebGLBuffer {
 const RED = [1, 0, 0];
 const GREEN = [0, 1, 0];
 const BLUE = [0, 0, 1];
-const PINK = [1, 0, 1];
-const TURQUOISE = [0, 1, 1];
+const YELLOW = [1, 1, 0];
 const WHITE = [1, 1, 1];
+const ORANGE = [1, 0.6, 0];
 const BLACK = [0, 0, 0];
 
 function defineColors(gl: WebGLRenderingContext): WebGLBuffer {
@@ -73,15 +73,15 @@ function defineColors(gl: WebGLRenderingContext): WebGLBuffer {
     // front
     colorSide(colors, RED);
     // right
-    colorSide(colors, GREEN);
-    // top
     colorSide(colors, BLUE);
-    // left
-    colorSide(colors, PINK);
-    // bottom
-    colorSide(colors, TURQUOISE);
-    // back
+    // top
     colorSide(colors, WHITE);
+    // left
+    colorSide(colors, GREEN);
+    // bottom
+    colorSide(colors, YELLOW);
+    // back
+    colorSide(colors, ORANGE);
 
     let buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
