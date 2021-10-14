@@ -144,12 +144,12 @@ function drawSolid(cube: Cube, buffer: CubeBuffer) {
 
 function facesToBuffer(cube: Cube): WebGLBuffer {
     return createColorBuffer(gl,
-        cube.faces.front,
-        cube.faces.right,
-        cube.faces.top,
-        cube.faces.left,
-        cube.faces.bottom,
-        cube.faces.back);
+        cube.faces.front.rgb,
+        cube.faces.right.rgb,
+        cube.faces.top.rgb,
+        cube.faces.left.rgb,
+        cube.faces.bottom.rgb,
+        cube.faces.back.rgb);
 }
 
 function drawWireFrame(buffer: CubeBuffer) {

@@ -3,20 +3,24 @@ export interface Cube {
     faces: Faces,
 }
 
-const RED: [number, number, number] = [1, 0, 0];
-const GREEN: [number, number, number] = [0, 1, 0];
-const BLUE: [number, number, number] = [0, 0, 1];
-const YELLOW: [number, number, number] = [1, 1, 0];
-const WHITE: [number, number, number] = [1, 1, 1];
-const ORANGE: [number, number, number] = [1, 0.6, 0];
+const RED: FaceColor = { rgb: [1, 0, 0] };
+const GREEN: FaceColor = { rgb: [0, 1, 0] };
+const BLUE: FaceColor = { rgb: [0, 0, 1] };
+const YELLOW: FaceColor = { rgb: [1, 1, 0] };
+const WHITE: FaceColor = { rgb: [1, 1, 1] };
+const ORANGE: FaceColor = { rgb: [1, 0.6, 0] };
 
-interface Faces {
-    front: [number, number, number],
-    right: [number, number, number],
-    top: [number, number, number],
-    left: [number, number, number],
-    bottom: [number, number, number],
-    back: [number, number, number],
+export interface FaceColor {
+    rgb: [number, number, number],
+}
+
+export interface Faces {
+    front: FaceColor,
+    right: FaceColor,
+    top: FaceColor,
+    left: FaceColor,
+    bottom: FaceColor,
+    back: FaceColor,
 }
 
 export interface RubikCube {
