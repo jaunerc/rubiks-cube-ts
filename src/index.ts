@@ -45,7 +45,7 @@ function start() {
     gl = prepareWebGl(canvas);
     shaderProgram = gl.createProgram();
 
-    gl.clearColor(0.4, 0.823, 1, 1);
+    gl.clearColor(0, 0, 0, 1);
 
     document.addEventListener("keydown", keyPressed);
 
