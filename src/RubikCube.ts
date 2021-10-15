@@ -1,8 +1,8 @@
 import {
     multiply,
-    ROTATION_X_AXIS_NINETY_DEGREES_CLOCKWISE,
-    ROTATION_Y_AXIS_NINETY_DEGREES_CLOCKWISE,
-    ROTATION_Z_AXIS_NINETY_DEGREES_CLOCKWISE
+    ROTATION_X_AXIS_NINETY_DEGREES_CLOCKWISE, ROTATION_X_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE,
+    ROTATION_Y_AXIS_NINETY_DEGREES_CLOCKWISE, ROTATION_Y_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE,
+    ROTATION_Z_AXIS_NINETY_DEGREES_CLOCKWISE, ROTATION_Z_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE
 } from "./Matrix";
 
 export interface Cube {
@@ -57,7 +57,7 @@ export function createRubikCube(): RubikCube {
     return {cubes};
 }
 
-export function rotateLayerX(rubik: RubikCube, layerIndex: number): void {
+export function rotateLayerXClockwise(rubik: RubikCube, layerIndex: number): void {
     rubik.cubes
         .filter(cube => cube.position[0] == layerIndex)
         .forEach(cube => {
@@ -72,7 +72,22 @@ export function rotateLayerX(rubik: RubikCube, layerIndex: number): void {
         });
 }
 
-export function rotateLayerY(rubik: RubikCube, layerIndex: number): void {
+export function rotateLayerXCounterclockwise(rubik: RubikCube, layerIndex: number): void {
+    rubik.cubes
+        .filter(cube => cube.position[0] == layerIndex)
+        .forEach(cube => {
+            cube.position = multiply(ROTATION_X_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE, cube.position);
+            cube.faces = {
+                ...cube.faces,
+                front: cube.faces.top,
+                top: cube.faces.back,
+                back: cube.faces.bottom,
+                bottom: cube.faces.front,
+            };
+        });
+}
+
+export function rotateLayerYClockwise(rubik: RubikCube, layerIndex: number): void {
     rubik.cubes
         .filter(cube => cube.position[1] == layerIndex)
         .forEach(cube => {
@@ -87,7 +102,22 @@ export function rotateLayerY(rubik: RubikCube, layerIndex: number): void {
         });
 }
 
-export function rotateLayerZ(rubik: RubikCube, layerIndex: number): void {
+export function rotateLayerYCounterclockwise(rubik: RubikCube, layerIndex: number): void {
+    rubik.cubes
+        .filter(cube => cube.position[1] == layerIndex)
+        .forEach(cube => {
+            cube.position = multiply(ROTATION_Y_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE, cube.position);
+            cube.faces = {
+                ...cube.faces,
+                front: cube.faces.right,
+                right: cube.faces.back,
+                back: cube.faces.left,
+                left: cube.faces.front,
+            };
+        });
+}
+
+export function rotateLayerZClockwise(rubik: RubikCube, layerIndex: number): void {
     rubik.cubes
         .filter(cube => cube.position[2] == layerIndex)
         .forEach(cube => {
@@ -98,6 +128,21 @@ export function rotateLayerZ(rubik: RubikCube, layerIndex: number): void {
                 left: cube.faces.top,
                 bottom: cube.faces.left,
                 right: cube.faces.bottom,
+            };
+        });
+}
+
+export function rotateLayerZCounterclockwise(rubik: RubikCube, layerIndex: number): void {
+    rubik.cubes
+        .filter(cube => cube.position[2] == layerIndex)
+        .forEach(cube => {
+            cube.position = multiply(ROTATION_Z_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE, cube.position);
+            cube.faces = {
+                ...cube.faces,
+                top: cube.faces.left,
+                left: cube.faces.bottom,
+                bottom: cube.faces.right,
+                right: cube.faces.top,
             };
         });
 }

@@ -1,7 +1,15 @@
 import {mat4} from "gl-matrix";
 import {loadShader, prepareWebGl} from './GlShaderLoader';
 import {createColorBuffer, createCubeBuffer, CubeBuffer} from "./CubeBuffer";
-import {createRubikCube, Cube, rotateLayerX, rotateLayerY, rotateLayerZ, RubikCube} from "./RubikCube";
+import {
+    createRubikCube,
+    Cube,
+    rotateLayerXClockwise,
+    rotateLayerXCounterclockwise,
+    rotateLayerYClockwise, rotateLayerYCounterclockwise,
+    rotateLayerZClockwise, rotateLayerZCounterclockwise,
+    RubikCube
+} from "./RubikCube";
 
 interface ShaderContext {
     vertexPositionId: number,
@@ -166,31 +174,58 @@ function drawWireFrame(buffer: CubeBuffer) {
 function keyPressed(e: KeyboardEvent) {
     switch (e.key) {
         case 'r':
-            rotateLayerX(scene.rubikCube, 2);
+            rotateLayerXClockwise(scene.rubikCube, 2);
+            break;
+        case 'R':
+            rotateLayerXCounterclockwise(scene.rubikCube, 2);
             break;
         case 's':
-            rotateLayerX(scene.rubikCube, 0);
+            rotateLayerXClockwise(scene.rubikCube, 0);
+            break;
+        case 'S':
+            rotateLayerXCounterclockwise(scene.rubikCube, 0);
             break;
         case 'l':
-            rotateLayerX(scene.rubikCube, -2);
+            rotateLayerXClockwise(scene.rubikCube, -2);
+            break;
+        case 'L':
+            rotateLayerXCounterclockwise(scene.rubikCube, -2);
             break;
         case 't':
-            rotateLayerY(scene.rubikCube, 2);
+            rotateLayerYClockwise(scene.rubikCube, 2);
+            break;
+        case 'T':
+            rotateLayerYCounterclockwise(scene.rubikCube, 2);
             break;
         case 'e':
-            rotateLayerY(scene.rubikCube, 0);
+            rotateLayerYClockwise(scene.rubikCube, 0);
+            break;
+        case 'E':
+            rotateLayerYCounterclockwise(scene.rubikCube, 0);
             break;
         case 'b':
-            rotateLayerY(scene.rubikCube, -2);
+            rotateLayerYClockwise(scene.rubikCube, -2);
+            break;
+        case 'B':
+            rotateLayerYCounterclockwise(scene.rubikCube, -2);
             break;
         case 'f':
-            rotateLayerZ(scene.rubikCube, 2);
+            rotateLayerZClockwise(scene.rubikCube, 2);
+            break;
+        case 'F':
+            rotateLayerZCounterclockwise(scene.rubikCube, 2);
             break;
         case 'm':
-            rotateLayerZ(scene.rubikCube, 0);
+            rotateLayerZClockwise(scene.rubikCube, 0);
+            break;
+        case 'M':
+            rotateLayerZCounterclockwise(scene.rubikCube, 0);
             break;
         case 'k':
-            rotateLayerZ(scene.rubikCube, -2);
+            rotateLayerZClockwise(scene.rubikCube, -2);
+            break;
+        case 'K':
+            rotateLayerZCounterclockwise(scene.rubikCube, -2);
             break;
     }
 }
