@@ -10,16 +10,16 @@ export interface Cube {
     faces: Faces,
 }
 
-const RED: FaceColor = { rgb: [1, 0, 0] };
-const GREEN: FaceColor = { rgb: [0, 1, 0] };
-const BLUE: FaceColor = { rgb: [0, 0, 1] };
-const YELLOW: FaceColor = { rgb: [1, 1, 0] };
-const WHITE: FaceColor = { rgb: [1, 1, 1] };
-const ORANGE: FaceColor = { rgb: [1, 0.6, 0] };
-
 export interface FaceColor {
     rgb: [number, number, number],
 }
+
+const RED: FaceColor = {rgb: [1, 0, 0]};
+const GREEN: FaceColor = {rgb: [0, 1, 0]};
+const BLUE: FaceColor = {rgb: [0, 0, 1]};
+const YELLOW: FaceColor = {rgb: [1, 1, 0]};
+const WHITE: FaceColor = {rgb: [1, 1, 1]};
+const ORANGE: FaceColor = {rgb: [1, 0.6, 0]};
 
 export interface Faces {
     front: FaceColor,
@@ -61,14 +61,14 @@ export function rotateLayerXClockwise(rubik: RubikCube, layerIndex: number): voi
     rubik.cubes
         .filter(cube => cube.position[0] == layerIndex)
         .forEach(cube => {
-                cube.position = multiply(ROTATION_X_AXIS_NINETY_DEGREES_CLOCKWISE, cube.position);
-                cube.faces = {
-                        ...cube.faces,
-                        front: cube.faces.bottom,
-                        top: cube.faces.front,
-                        back: cube.faces.top,
-                        bottom: cube.faces.back,
-                };
+            cube.position = multiply(ROTATION_X_AXIS_NINETY_DEGREES_CLOCKWISE, cube.position);
+            cube.faces = {
+                ...cube.faces,
+                front: cube.faces.bottom,
+                top: cube.faces.front,
+                back: cube.faces.top,
+                bottom: cube.faces.back,
+            };
         });
 }
 
@@ -124,10 +124,10 @@ export function rotateLayerZClockwise(rubik: RubikCube, layerIndex: number): voi
             cube.position = multiply(ROTATION_Z_AXIS_NINETY_DEGREES_CLOCKWISE, cube.position);
             cube.faces = {
                 ...cube.faces,
-                top: cube.faces.right,
-                left: cube.faces.top,
-                bottom: cube.faces.left,
-                right: cube.faces.bottom,
+                top: cube.faces.left,
+                left: cube.faces.bottom,
+                bottom: cube.faces.right,
+                right: cube.faces.top,
             };
         });
 }
@@ -139,10 +139,10 @@ export function rotateLayerZCounterclockwise(rubik: RubikCube, layerIndex: numbe
             cube.position = multiply(ROTATION_Z_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE, cube.position);
             cube.faces = {
                 ...cube.faces,
-                top: cube.faces.left,
-                left: cube.faces.bottom,
-                bottom: cube.faces.right,
-                right: cube.faces.top,
+                top: cube.faces.right,
+                left: cube.faces.top,
+                bottom: cube.faces.left,
+                right: cube.faces.bottom,
             };
         });
 }
