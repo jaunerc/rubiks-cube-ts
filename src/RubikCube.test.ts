@@ -1,8 +1,8 @@
 import {
     createRubikCube,
-    rotateLayerXClockwise,
-    rotateLayerYClockwise,
-    rotateLayerZClockwise,
+    rotateLayerXClockwise, rotateLayerXCounterclockwise,
+    rotateLayerYClockwise, rotateLayerYCounterclockwise,
+    rotateLayerZClockwise, rotateLayerZCounterclockwise,
     RubikCube
 } from "./RubikCube";
 
@@ -32,6 +32,33 @@ describe("RubikCube", () => {
             const expectedTopColors = Array(9).fill(red);
             const layerIndex = -2;
             rotateLayerXClockwise(rubik, layerIndex);
+            expect(filterTopFaceColorsAlongXAxis(rubik, layerIndex))
+                .toEqual(expectedTopColors);
+        });
+        it("the right layer orange faces should be on the top after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const orange = [1, 0.6, 0];
+            const expectedTopColors = Array(9).fill(orange);
+            const layerIndex = 2;
+            rotateLayerXCounterclockwise(rubik, layerIndex);
+            expect(filterTopFaceColorsAlongXAxis(rubik, layerIndex))
+                .toEqual(expectedTopColors);
+        });
+        it("the middle layer orange faces should be on the top after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const orange = [1, 0.6, 0];
+            const expectedTopColors = Array(9).fill(orange);
+            const layerIndex = 0;
+            rotateLayerXCounterclockwise(rubik, layerIndex);
+            expect(filterTopFaceColorsAlongXAxis(rubik, layerIndex))
+                .toEqual(expectedTopColors);
+        });
+        it("the left layer orange faces should be on the top after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const orange = [1, 0.6, 0];
+            const expectedTopColors = Array(9).fill(orange);
+            const layerIndex = -2;
+            rotateLayerXCounterclockwise(rubik, layerIndex);
             expect(filterTopFaceColorsAlongXAxis(rubik, layerIndex))
                 .toEqual(expectedTopColors);
         });
@@ -69,6 +96,33 @@ describe("RubikCube", () => {
             expect(filterRightFaceColorsAlongYAxis(rubik, layerIndex))
                 .toEqual(expectedTopColors);
         });
+        it("the top layer orange faces should be on the right after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const orange = [1, 0.6, 0];
+            const expectedTopColors = Array(9).fill(orange);
+            const layerIndex = 2;
+            rotateLayerYCounterclockwise(rubik, layerIndex);
+            expect(filterRightFaceColorsAlongYAxis(rubik, layerIndex))
+                .toEqual(expectedTopColors);
+        });
+        it("the middle layer orange faces should be on the right after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const orange = [1, 0.6, 0];
+            const expectedTopColors = Array(9).fill(orange);
+            const layerIndex = 0;
+            rotateLayerYCounterclockwise(rubik, layerIndex);
+            expect(filterRightFaceColorsAlongYAxis(rubik, layerIndex))
+                .toEqual(expectedTopColors);
+        });
+        it("the bottom layer orange faces should be on the right after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const orange = [1, 0.6, 0];
+            const expectedTopColors = Array(9).fill(orange);
+            const layerIndex = -2;
+            rotateLayerYCounterclockwise(rubik, layerIndex);
+            expect(filterRightFaceColorsAlongYAxis(rubik, layerIndex))
+                .toEqual(expectedTopColors);
+        });
 
         function filterRightFaceColorsAlongYAxis(rubik: RubikCube, layerIndex: number): [number, number, number][] {
             return rubik.cubes.filter(cube => cube.position[1] === layerIndex)
@@ -85,7 +139,7 @@ describe("RubikCube", () => {
             expect(filterBottomFaceColorsAlongZAxis(rubik, layerIndex))
                 .toEqual(expectedBottomColors);
         });
-        it("the middle layer red faces should be on the bottom after rotated clockwise", () => {
+        it("the middle layer blue faces should be on the bottom after rotated clockwise", () => {
             const rubik = createRubikCube();
             const blue = [0, 0, 1];
             const expectedBottomColors = Array(9).fill(blue);
@@ -94,12 +148,39 @@ describe("RubikCube", () => {
             expect(filterBottomFaceColorsAlongZAxis(rubik, layerIndex))
                 .toEqual(expectedBottomColors);
         });
-        it("the back layer red faces should be on the bottom after rotated clockwise", () => {
+        it("the back layer blue faces should be on the bottom after rotated clockwise", () => {
             const rubik = createRubikCube();
             const blue = [0, 0, 1];
             const expectedBottomColors = Array(9).fill(blue);
             const layerIndex = -2;
             rotateLayerZClockwise(rubik, layerIndex);
+            expect(filterBottomFaceColorsAlongZAxis(rubik, layerIndex))
+                .toEqual(expectedBottomColors);
+        });
+        it("the front layer yellow faces should be on the bottom after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const yellow = [1, 1, 0];
+            const expectedBottomColors = Array(9).fill(yellow);
+            const layerIndex = 2;
+            rotateLayerZCounterclockwise(rubik, layerIndex);
+            expect(filterBottomFaceColorsAlongZAxis(rubik, layerIndex))
+                .toEqual(expectedBottomColors);
+        });
+        it("the middle layer yellow faces should be on the bottom after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const yellow = [1, 1, 0];
+            const expectedBottomColors = Array(9).fill(yellow);
+            const layerIndex = 0;
+            rotateLayerZCounterclockwise(rubik, layerIndex);
+            expect(filterBottomFaceColorsAlongZAxis(rubik, layerIndex))
+                .toEqual(expectedBottomColors);
+        });
+        it("the back layer yellow faces should be on the bottom after rotated counterclockwise", () => {
+            const rubik = createRubikCube();
+            const yellow = [1, 1, 0];
+            const expectedBottomColors = Array(9).fill(yellow);
+            const layerIndex = -2;
+            rotateLayerZCounterclockwise(rubik, layerIndex);
             expect(filterBottomFaceColorsAlongZAxis(rubik, layerIndex))
                 .toEqual(expectedBottomColors);
         });
