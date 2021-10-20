@@ -98,7 +98,7 @@ function createViewMatrix() {
 
 function createScene(): Scene {
     return {
-        eyePosition: [20, 20, 20],
+        eyePosition: [10, 10, 10],
         wireFrameColor: [0, 0, 0, 1],
         lookAtCenter: [0, 0, 0],
         lookAtUp: [0, 1, 0],

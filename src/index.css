@@ -1,4 +1,11 @@
-.all {
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rotations-key-info {
     display: flex;
     flex-direction: row;
+    column-gap: 10em;
 }

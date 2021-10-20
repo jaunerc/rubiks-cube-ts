@@ -5,31 +5,40 @@
     <link rel="stylesheet" href="index.css">
     <title>Rubik's Cube</title>
 </head>
-<body class="all">
-<canvas id="myCanvas" width="800" height="800"></canvas>
-<div>
-    <p>
-        Rotate the Rubik's cube faces with your keyboard!<br>
-        Press the keys below for a clockwise rotation or the same key upper-case for a counterclockwise rotation.<br>
-        <br>
-        On the z-axis:<br>
-        `f` Front<br>
-        `m` Middle<br>
-        `k` Back<br>
-        <br>
-        On the y-axis:<br>
-        `t` Top<br>
-        `e` Middle<br>
-        `b` Bottom<br>
-        <br>
-        On the x-axis:<br>
-        `r` Right<br>
-        `s` Middle<br>
-        `l` Left<br>
-    </p>
+<body>
+<div id="container">
+    <h1>Rubik's Cube</h1>
+    <canvas id="myCanvas" width="600" height="600"></canvas>
+    <div>
+        <div class="rotations">
+            <p>
+                Rotate the Rubik's cube faces with your keyboard!<br>
+                Press the keys below for a clockwise rotation or the same key upper-case for a counterclockwise
+                rotation.
+            </p>
+            <div class="rotations-key-info">
+                <p>
+                    On the z-axis:<br>
+                    `f` Front<br>
+                    `m` Middle<br>
+                    `k` Back<br>
+                </p>
+                <p>
+                    On the y-axis:<br>
+                    `t` Top<br>
+                    `e` Middle<br>
+                    `b` Bottom<br>
+                </p>
+                <p>
+                    On the x-axis:<br>
+                    `r` Right<br>
+                    `s` Middle<br>
+                    `l` Left<br>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
 </div>
-<script src="main.js"></script>
-
-
 </body>
 </html>
