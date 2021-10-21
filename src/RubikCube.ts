@@ -94,10 +94,10 @@ export function rotateLayerYClockwise(rubik: RubikCube, layerIndex: number): voi
             cube.position = multiply(ROTATION_Y_AXIS_NINETY_DEGREES_CLOCKWISE, cube.position);
             cube.faces = {
                 ...cube.faces,
-                front: cube.faces.left,
-                right: cube.faces.front,
-                back: cube.faces.right,
-                left: cube.faces.back,
+                front: cube.faces.right,
+                right: cube.faces.back,
+                back: cube.faces.left,
+                left: cube.faces.front,
             };
         });
 }
@@ -109,10 +109,10 @@ export function rotateLayerYCounterclockwise(rubik: RubikCube, layerIndex: numbe
             cube.position = multiply(ROTATION_Y_AXIS_NINETY_DEGREES_COUNTERCLOCKWISE, cube.position);
             cube.faces = {
                 ...cube.faces,
-                front: cube.faces.right,
-                right: cube.faces.back,
-                back: cube.faces.left,
-                left: cube.faces.front,
+                front: cube.faces.left,
+                right: cube.faces.front,
+                back: cube.faces.right,
+                left: cube.faces.back,
             };
         });
 }
