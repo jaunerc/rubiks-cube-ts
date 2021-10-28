@@ -10,6 +10,7 @@ import {
     rotateLayerZClockwise, rotateLayerZCounterclockwise,
     RubikCube
 } from "./RubikCube";
+import "./index.css"
 
 interface ShaderContext {
     vertexPositionId: number,
